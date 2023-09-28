@@ -1,9 +1,14 @@
 """
 This file will push message to the queue
 """
-import dotenv
+import json
 import os
 import random
+import time
+from datetime import datetime
+from uuid import uuid4
+
+import dotenv
 import redis
 
 dotenv.load_dotenv()
@@ -20,7 +25,22 @@ def push_message(db: redis.StrictRedis, queue_name: str, message: str):
 
 def main(num_messsages: int, delay: float):
     db, queue_name = create_redis()
-    print(queue_name)
+    db.flushall()
+    for i in range(num_messsages):
+        message = {
+            "id": str(uuid4()),
+            "ts": datetime.utcnow().isoformat(),
+            "data": {
+                "message_number": i,
+                "x": random.randrange(0, 100),
+                "y": random.randrange(0, 100),
+            },
+        }
+        message = json.dumps(message)
+        push_message(db, queue_name, message)
+        print("Pushed message to queue")
+        time.sleep(delay)
+
 
 if __name__ == "__main__":
-    main(12, 1)
+    main(1000000, 0.1)
