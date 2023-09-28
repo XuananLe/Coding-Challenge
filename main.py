@@ -1,3 +1,4 @@
+import asyncio
 from typing import Union
 
 from fastapi import FastAPI
@@ -26,6 +27,11 @@ def read_root():
     fake_dict = {"foo": "bar"}
     return jsonable_encoder(fake_dict)
 
+
+@app.get("/hello")
+async def hello():
+    await asyncio.sleep(1)
+    return {"message": "Hello World the second time"}
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
