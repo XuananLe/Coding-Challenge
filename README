@@ -1,8 +1,0 @@
-This is the implementation of Worker-Queue pattern using Redis.
-To use this.
-1. Install Docker and Redis python package
-2. Run `docker-compose up - d' to start the redis server at the port 6380
-3. Run `python worker.py` as many time you want to start the worker
-4. Run `python app.py` to start the flushing the queue
-This implementation covers
--  Error handling when the worker is not available or can not process the task(This will requeue the task and pass it to the next worker)
